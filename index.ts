@@ -1,6 +1,8 @@
 import yargs from "yargs";
 import {ChildProcessWithoutNullStreams, spawn} from "child_process";
+require("dotenv").config();
 
+console.log(process.env.PROJECT_ROOT);
 // const argv = yargs(process.argv.slice(2))
 // .option("f", {
 //     alias: "file",

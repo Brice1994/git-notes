@@ -37,6 +37,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var child_process_1 = require("child_process");
+require("dotenv").config();
+console.log(process.env.PROJECT_ROOT);
 // const argv = yargs(process.argv.slice(2))
 // .option("f", {
 //     alias: "file",

@@ -13,7 +13,8 @@ async function isGitRepo(): Promise<boolean>{
         throw new Error(`Need project root set to begin saving`);
     }
     try {
-        spawnSync(`git rev-parse --is-inside-work-tree ${projectRoot}`);
+        const s = spawnSync(`git rev-parse --is-inside-work-tree ${projectRoot}`);
+        console.dir(s);
         return true;
     }catch(e) {
         return false;

@@ -1,8 +1,9 @@
 import yargs from "yargs";
 import {ChildProcessWithoutNullStreams, spawn, spawnSync} from "child_process";
+import {getLogger} from "log4js";
 import commandExists from "command-exists";
 import fs from "fs";
-
+const logger = getLogger("index");
 async function isGitRepo(): Promise<boolean>{
     const gitExists = await commandExists("git");
     if(!gitExists){
@@ -14,7 +15,10 @@ async function isGitRepo(): Promise<boolean>{
     }
     try {
         const s = spawnSync("git", ["rev-parse", "--is-inside-work-tree", projectRoot]);
-        console.dir(s);
+        if(s.error){
+            console.error(`Couldn't spawn git command, error: ${s.error}`)
+            return false;
+        }
         return true;
     }catch(e) {
         return false;
@@ -27,7 +31,7 @@ try {
 }
 require("dotenv").config();
 
-console.log(process.env.PROJECT_ROOT);
+logger.info(process.env.PROJECT_ROOT);
 // const argv = yargs(process.argv.slice(2))
 // .option("f", {
 //     alias: "file",
@@ -49,13 +53,14 @@ console.log(process.env.PROJECT_ROOT);
 })();
 async function spawnPromise(childProcess: ChildProcessWithoutNullStreams){
     childProcess.stdout.on("data", (data) => {
-        console.log(`${childProcess.spawnfile}: ${data}`);
+        logger.info(`${childProcess.spawnfile}: ${data}`);
     });
     childProcess.stderr.on("data", (data) => {
-        console.error(`${childProcess.spawnfile}: ${data}`);
+        logger.error(`${childProcess.spawnfile}: ${data}`);
     })
     return await new Promise((res) => {
         childProcess.on("close", (code) => {
+            logger.info(`Command: ${childProcess.spawnfile}, with args: ${childProcess.spawnargs} ran successfully.`);
             res(code)
         });
     })

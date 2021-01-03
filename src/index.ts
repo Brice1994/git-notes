@@ -4,6 +4,7 @@ import {getLogger} from "log4js";
 import commandExists from "command-exists";
 import fs from "fs";
 const logger = getLogger("index");
+logger.level = "debug"
 async function isGitRepo(): Promise<boolean>{
     const gitExists = await commandExists("git");
     if(!gitExists){

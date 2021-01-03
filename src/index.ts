@@ -27,7 +27,7 @@ async function isGitRepo(): Promise<boolean>{
     }
 }
 
-logger.info(process.env.PROJECT_ROOT);
+logger.info(config.projectRoot);
 const argv = yargs(process.argv.slice(2))
 .option("r", {
     demandOption: false,

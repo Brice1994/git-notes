@@ -1,6 +1,24 @@
 import yargs from "yargs";
-import {ChildProcessWithoutNullStreams, spawn} from "child_process";
+import {ChildProcessWithoutNullStreams, spawn, spawnSync} from "child_process";
+import commandExists from "command-exists";
 import fs from "fs";
+
+async function isGitRepo(): Promise<boolean>{
+    const gitExists = await commandExists("git");
+    if(!gitExists){
+        throw new Error(`Need to have git installed.`)
+    }
+    const projectRoot = process.env.PROJECT_ROOT;
+    if(projectRoot === undefined){
+        throw new Error(`Need project root set to begin saving`);
+    }
+    try {
+        spawnSync(`git rev-parse --is-inside-work-tree ${projectRoot}`);
+        return true;
+    }catch(e) {
+        return false;
+    }
+}
 try {
     fs.readFileSync(".env");
 }catch(e){
@@ -21,6 +39,9 @@ console.log(process.env.PROJECT_ROOT);
 // console.log(argv.file);
 
 (async () => {
+    if(!(await isGitRepo())){
+        throw new Error(`Directory needs to be a git repo.`);
+    }
     await spawnPromise(spawn("git", ["add", "."]));
     await spawnPromise(spawn("git", ["commit", "-m", "save"]));
     await spawnPromise(spawn("git", ["push"]))

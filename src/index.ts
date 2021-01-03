@@ -56,7 +56,7 @@ async function spawnPromise(childProcess: ChildProcessWithoutNullStreams){
     })
     return await new Promise((res) => {
         childProcess.on("close", (code) => {
-            logger.info(`Command: ${childProcess.spawnfile}, with args: ${childProcess.spawnargs} ran successfully.`);
+            logger.info(`Command: ${childProcess.spawnfile}, with args: ${childProcess.spawnargs} finished with code: ${code}.`);
             res(code)
         });
     })

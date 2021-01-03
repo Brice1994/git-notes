@@ -4,7 +4,7 @@ import {getLogger} from "log4js";
 import commandExists from "command-exists";
 import fs from "fs";
 const logger = getLogger("index");
-logger.level = "debug"
+logger.level = "debug";
 async function isGitRepo(): Promise<boolean>{
     const gitExists = await commandExists("git");
     if(!gitExists){
@@ -33,16 +33,14 @@ try {
 require("dotenv").config();
 
 logger.info(process.env.PROJECT_ROOT);
-// const argv = yargs(process.argv.slice(2))
-// .option("f", {
-//     alias: "file",
-//     type: "string",
-//     nargs: 1,
-//     demand: true,
-// })
-// .argv;
+const argv = yargs(process.argv.slice(2))
+.option("r", {
+    demandOption: false,
+    alias: "root"
+})
+.argv;
 
-// console.log(argv.file);
+console.log(argv.root);
 
 (async () => {
     if(!(await isGitRepo())){

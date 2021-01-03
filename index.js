@@ -55,6 +55,9 @@ var child_process_1 = require("child_process");
                 return [4 /*yield*/, spawnPromise(child_process_1.spawn("git", ["commit", "-m", "save"]))];
             case 2:
                 _a.sent();
+                return [4 /*yield*/, spawnPromise(child_process_1.spawn("git", ["push"]))];
+            case 3:
+                _a.sent();
                 return [2 /*return*/];
         }
     });

@@ -15,6 +15,7 @@ import {ChildProcessWithoutNullStreams, spawn} from "child_process";
 (async () => {
     await spawnPromise(spawn("git", ["add", "."]));
     await spawnPromise(spawn("git", ["commit", "-m", "save"]));
+    await spawnPromise(spawn("git", ["push"]))
 })();
 async function spawnPromise(childProcess: ChildProcessWithoutNullStreams){
     childProcess.stdout.on("data", (data) => {

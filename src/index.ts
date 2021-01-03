@@ -5,15 +5,16 @@ import commandExists from "command-exists";
 import fs from "fs";
 const logger = getLogger("index");
 logger.level = "debug";
+
+const config = require("../package.json")
+console.log(config);
+
 async function isGitRepo(): Promise<boolean>{
     const gitExists = await commandExists("git");
     if(!gitExists){
         throw new Error(`Need to have git installed.`)
     }
-    const projectRoot = process.env.PROJECT_ROOT;
-    if(projectRoot === undefined){
-        throw new Error(`Need project root set to begin saving`);
-    }
+    const projectRoot = config.projectRoot;
     try {
         const s = spawnSync("git", ["rev-parse", "--is-inside-work-tree", projectRoot]);
         if(s.error){
@@ -25,12 +26,6 @@ async function isGitRepo(): Promise<boolean>{
         return false;
     }
 }
-try {
-    fs.readFileSync(".env");
-}catch(e){
-    throw new Error(`Couldn't find .env file, need project root set in order to save, error: ${e}`);
-}
-require("dotenv").config();
 
 logger.info(process.env.PROJECT_ROOT);
 const argv = yargs(process.argv.slice(2))
@@ -40,8 +35,10 @@ const argv = yargs(process.argv.slice(2))
 })
 .argv;
 
-console.log(argv.root);
+if(argv.root){
+    logger.info(`Setting notes root to: ${argv.root}`);
 
+}
 (async () => {
     if(!(await isGitRepo())){
         throw new Error(`Directory needs to be a git repo.`);

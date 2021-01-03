@@ -14,7 +14,7 @@ async function isGitRepo(): Promise<boolean>{
     }
     try {
         const s = spawnSync("git", ["rev-parse", "--is-inside-work-tree", projectRoot]);
-        console.dir(s.error);
+        console.dir(s);
         return true;
     }catch(e) {
         return false;

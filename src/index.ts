@@ -1,5 +1,11 @@
 import yargs from "yargs";
 import {ChildProcessWithoutNullStreams, spawn} from "child_process";
+import fs from "fs";
+try {
+    fs.readFileSync(".env");
+}catch(e){
+    throw new Error(`Couldn't find .env file, need project root set in order to save, error: ${e}`);
+}
 require("dotenv").config();
 
 console.log(process.env.PROJECT_ROOT);

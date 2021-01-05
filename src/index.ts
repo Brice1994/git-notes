@@ -6,15 +6,13 @@ import fs from "fs";
 const logger = getLogger("index");
 logger.level = "debug";
 
-const config = require("../package.json")
-console.log(config);
-
 async function isGitRepo(): Promise<boolean>{
     const gitExists = await commandExists("git");
     if(!gitExists){
         throw new Error(`Need to have git installed.`)
     }
-    const projectRoot = config.projectRoot;
+    const projectRoot = __dirname;
+    console.log(projectRoot);
     try {
         const s = spawnSync("git", ["rev-parse", "--is-inside-work-tree", projectRoot]);
         if(s.error){
@@ -27,7 +25,6 @@ async function isGitRepo(): Promise<boolean>{
     }
 }
 
-logger.info(config.projectRoot);
 const argv = yargs(process.argv.slice(2))
 .option("r", {
     demandOption: false,

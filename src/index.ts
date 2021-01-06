@@ -2,7 +2,8 @@ import yargs from "yargs";
 import {ChildProcessWithoutNullStreams, spawn, spawnSync} from "child_process";
 import {getLogger} from "log4js";
 import commandExists from "command-exists";
-import fs from "fs";
+import chokidar from "chokidar";
+import _ from "lodash";
 const logger = getLogger("index");
 logger.level = "debug";
 
@@ -36,14 +37,15 @@ if(argv.root){
     logger.info(`Setting notes root to: ${argv.root}`);
 
 }
-(async () => {
-    if(!(await isGitRepo())){
-        throw new Error(`Directory needs to be a git repo.`);
-    }
+async function saveGitRepo(){
     await spawnPromise(spawn("git", ["add", "."]));
     await spawnPromise(spawn("git", ["commit", "-m", "save"]));
     await spawnPromise(spawn("git", ["push"]))
-})();
+}
+const watcher = chokidar.watch(".").on("change", (event, path) => {
+    _.debounce(saveGitRepo, 500)()
+});
+
 async function spawnPromise(childProcess: ChildProcessWithoutNullStreams){
     childProcess.stdout.on("data", (data) => {
         logger.info(`${childProcess.spawnfile}, ${childProcess.spawnargs}: ${data}`);

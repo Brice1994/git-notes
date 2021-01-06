@@ -48,9 +48,6 @@ async function spawnPromise(childProcess: ChildProcessWithoutNullStreams){
     childProcess.stdout.on("data", (data) => {
         logger.info(`${childProcess.spawnfile}, ${childProcess.spawnargs}: ${data}`);
     });
-    childProcess.stderr.on("data", (data) => {
-        logger.error(`${childProcess.spawnfile}, ${childProcess.spawnargs}: ${data}`);
-    })
     return await new Promise((res) => {
         childProcess.on("close", (code) => {
             logger.info(`Command: ${childProcess.spawnfile}, with args: ${childProcess.spawnargs} finished with code: ${code}.`);

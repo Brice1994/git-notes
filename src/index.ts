@@ -43,7 +43,7 @@ async function saveGitRepo(){
     await spawnPromise(spawn("git", ["push"]))
 }
 const watcher = chokidar.watch(".").on("change", (event, path) => {
-    _.debounce(saveGitRepo, 500)()
+    _.debounce(saveGitRepo, 500)();
 });
 
 async function spawnPromise(childProcess: ChildProcessWithoutNullStreams){

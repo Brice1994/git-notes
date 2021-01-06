@@ -42,7 +42,7 @@ async function saveGitRepo(){
     await spawnPromise(spawn("git", ["commit", "-m", "save"]));
     await spawnPromise(spawn("git", ["push"]))
 }
-const watcher = chokidar.watch(".").on("change",  _.debounce(saveGitRepo, 2000))
+const watcher = chokidar.watch(".").on("change",  _.debounce(saveGitRepo, 2000));
 
 async function spawnPromise(childProcess: ChildProcessWithoutNullStreams){
     childProcess.stdout.on("data", (data) => {

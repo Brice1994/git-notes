@@ -4,6 +4,13 @@ import {getLogger} from "log4js";
 import commandExists from "command-exists";
 import chokidar from "chokidar";
 import _ from "lodash";
+import fs from "fs";
+
+try {
+    const gitIgnore = fs.readFileSync(".gitignore");
+}catch(e){
+    console.log(`No .gitignore found, watching everything!`);
+}
 const logger = getLogger("index");
 logger.level = "debug";
 
@@ -32,11 +39,11 @@ const argv = yargs(process.argv.slice(2))
     alias: "root"
 })
 .argv;
-
 if(argv.root){
     logger.info(`Setting notes root to: ${argv.root}`);
 
 }
+
 async function saveGitRepo(){
     await spawnPromise(spawn("git", ["add", "."]));
     await spawnPromise(spawn("git", ["commit", "-m", "save"]));
